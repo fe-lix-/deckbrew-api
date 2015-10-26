@@ -2,34 +2,35 @@
 
 namespace DeckBrew;
 
+use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\ClientInterface as HttpClientInterface;
+
 class Client
 {
     const BASE_URL = 'https://api.deckbrew.com/';
     const MTG_CARDS = '/mtg/cards';
 
-    /** @var HttpClient */
+    /** @var HttpClientInterface */
     private $client;
 
-    public function __construct()
+    private $options = [
+        'base_uri' => self::BASE_URL
+    ];
+
+    public function __construct(HttpClientInterface $client = null)
     {
-        $this->client = new HttpClient([
-            'base_uri' => self::BASE_URL
-        ]);
+        $this->client = $client ? $client : new HttpClient($this->options);
     }
 
-    public function searchCard($spec, $page = 0)
+    public function searchCard(Criteria\CardSearch $criteria = null)
     {
         $options = [];
 
-        if ($name) {
-            $options = ['query' => ['name' => $name]];
+        if ($criteria) {
+            $options = ['query' => $criteria->getCriteria()];
         }
 
-        if ($page) {
-            $options['query']['page'] = $page;
-        }
-
-        return $this->client->get(self::MTG_CARDS, $options);
+        return $this->client->request('GET', self::MTG_CARDS, $options);
     }
 
     public function getCard($id)
