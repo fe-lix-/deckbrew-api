@@ -4,7 +4,11 @@ namespace DeckBrew\Criteria;
 
 class CardSearch
 {
+    /** @var array */
     private $criteria = [];
+
+    /** @var int */
+    private $page;
 
     /**
      * @param string $name
@@ -12,7 +16,7 @@ class CardSearch
      */
     public function withType($name)
     {
-        $this->criteria['type'] = $name;
+        $this->criteria[] = ['type' => $name];
 
         return $this;
     }
@@ -23,7 +27,7 @@ class CardSearch
      */
     public function withSuperType($name)
     {
-        $this->criteria['supertype'] = $name;
+        $this->criteria[] = ['supertype' => $name];
 
         return $this;
     }
@@ -34,7 +38,7 @@ class CardSearch
      */
     public function withColor($color)
     {
-        $this->criteria['color'] = $color;
+        $this->criteria[] = ['color' => $color];
 
         return $this;
     }
@@ -45,7 +49,7 @@ class CardSearch
      */
     public function withName($name)
     {
-        $this->criteria['name'] = $name;
+        $this->criteria[] = ['name' => $name];
 
         return $this;
     }
@@ -56,7 +60,7 @@ class CardSearch
      */
     public function withOracle($oracle)
     {
-        $this->criteria['oracle'] = $oracle;
+        $this->criteria[] = ['oracle' => $oracle];
 
         return $this;
     }
@@ -67,42 +71,42 @@ class CardSearch
      */
     public function withSet($setName)
     {
-        $this->criteria['set'] = $setName;
+        $this->criteria[] = ['set' => $setName];
 
         return $this;
     }
 
     public function withRarity($rarity)
     {
-        $this->criteria['rarity'] = $rarity;
+        $this->criteria[] = ['rarity' => $rarity];
 
         return $this;
     }
 
     public function isMulticolor($isMulticolor)
     {
-        $this->criteria['ismulticolor'] = $ismulticolor
+        $this->criteria[] = ['ismulticolor' => $ismulticolor];
 
         return $this;
     }
 
     public function withMultiverseId($multiverseId)
     {
-        $this->criteria['multiverseid'] = $multiverseid;
+        $this->criteria[] = ['multiverseid' => $multiverseid];
 
         return $this;
     }
 
     public function withFormat($format)
     {
-        $this->criteria['format'] = $format;
+        $this->criteria[] = ['format' => $format];
 
         return $this;
     }
 
     public function withStatus($status)
     {
-        $this->criteria['status'] = $status;
+        $this->criteria[] = ['status' => $status];
 
         return $this;
     }
@@ -113,7 +117,7 @@ class CardSearch
      */
     public function withPage($number)
     {
-        $this->criteria['page'] = $number;
+        $this->page = $number;
     }
 
     /**
@@ -121,6 +125,12 @@ class CardSearch
      */
     public function getCriteria()
     {
-        return $this->criteria;
+        $criteria = $this->criteria;
+
+        if (!is_null($this->page)) {
+            $criteria['page'] = $this->page;
+        }
+
+        return $criteria;
     }
 }

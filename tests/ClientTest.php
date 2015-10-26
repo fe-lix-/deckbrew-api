@@ -26,15 +26,29 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $response = $client->searchCard();
     }
 
-    public function testSearchCardByColor()
+    public function testSearchCardByName()
     {
         $this->httpClient->expects($this->once())
             ->method('request')
-            ->with('GET', Client::MTG_CARDS, ['query' => ['name' => 'somename']]);
+            ->with('GET', Client::MTG_CARDS . '?name=somename');
 
         $client = new Client($this->httpClient);
         $criteria = new Criteria\CardSearch();
         $criteria->withName('somename');
+
+        $response = $client->searchCard($criteria);
+    }
+
+    public function testSearchCardByDuplicatedProperty()
+    {
+        $this->httpClient->expects($this->once())
+            ->method('request')
+            ->with('GET', Client::MTG_CARDS . '?color=red&color=blue');
+
+        $client = new Client($this->httpClient);
+        $criteria = new Criteria\CardSearch();
+        $criteria->withColor('red')
+            ->withColor('blue');
 
         $response = $client->searchCard($criteria);
     }

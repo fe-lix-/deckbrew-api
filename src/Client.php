@@ -24,13 +24,17 @@ class Client
 
     public function searchCard(Criteria\CardSearch $criteria = null)
     {
-        $options = [];
+        $url = self::MTG_CARDS;
 
         if ($criteria) {
-            $options = ['query' => $criteria->getCriteria()];
+            $queryParams = [];
+            foreach ($criteria->getCriteria() as $value) {
+                $queryParams[] = key($value) . '=' . current($value);
+            }
+            $url = $url . "?" . implode('&', $queryParams);
         }
 
-        return $this->client->request('GET', self::MTG_CARDS, $options);
+        return $this->client->request('GET', $url);
     }
 
     public function getCard($id)
