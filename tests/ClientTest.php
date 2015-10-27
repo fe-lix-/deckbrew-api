@@ -3,6 +3,7 @@
 namespace DeckBrew;
 
 use GuzzleHttp\ClientInterface as HttpClient;
+use DeckBrew\Criteria\Specifications as Spec;
 
 class ClientTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,7 +24,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ->willReturn(self::RESPONSE);
 
         $client = new Client($this->httpClient);
-        $response = $client->searchCard();
+        $client->searchCard();
     }
 
     public function testSearchCardByName()
@@ -33,10 +34,11 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ->with('GET', Client::MTG_CARDS . '?name=somename');
 
         $client = new Client($this->httpClient);
-        $criteria = new Criteria\CardSearch();
-        $criteria->withName('somename');
+        $criteria = new Criteria\CardSearch([
+            new Spec\WithName('somename'),
+        ]);
 
-        $response = $client->searchCard($criteria);
+        $client->searchCard($criteria);
     }
 
     public function testSearchCardByDuplicatedProperty()
@@ -46,10 +48,11 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ->with('GET', Client::MTG_CARDS . '?color=red&color=blue');
 
         $client = new Client($this->httpClient);
-        $criteria = new Criteria\CardSearch();
-        $criteria->withColor('red')
-            ->withColor('blue');
+        $criteria = new Criteria\CardSearch([
+            new Spec\WithColor('red'),
+            new Spec\WithColor('blue'),
+        ]);
 
-        $response = $client->searchCard($criteria);
+        $client->searchCard($criteria);
     }
 }
