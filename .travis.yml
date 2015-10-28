@@ -1,0 +1,22 @@
+language: php
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+  - hhvm
+  - nightly
+
+install:
+  - composer install
+
+before_script:
+  ## PHPUnit
+  - mkdir -p build/logs
+
+script:
+  ## PHPUnit
+  - phpunit -c ./ --coverage-text --coverage-clover build/logs/clover.xml
+
+after_script:
+  ## Coveralls
+  - php vendor/bin/coveralls -v
