@@ -39,6 +39,6 @@ class Client
 
     public function getCard($id)
     {
-        return $this->client->get(self::MTG_CARDS . "/$id");
+        return $this->client->request('GET', self::MTG_CARDS . "/$id");
     }
 }

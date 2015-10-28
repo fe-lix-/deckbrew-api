@@ -55,4 +55,15 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $client->searchCard($criteria);
     }
+
+    public function testGetCard()
+    {
+        $this->httpClient->expects($this->once())
+            ->method('request')
+            ->with('GET', Client::MTG_CARDS . '/1234');
+
+        $client = new Client($this->httpClient);
+
+        $client->getCard(1234);
+    }
 }
