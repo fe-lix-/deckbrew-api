@@ -77,4 +77,70 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $client->getCard(1234);
     }
+
+    public function testGetSets()
+    {
+        $this->httpClient->expects($this->once())
+            ->method('request')
+            ->with('GET', Client::MTG_SETS);
+
+        $client = new Client($this->httpClient);
+
+        $client->getSets();
+    }
+
+    public function testGetSet()
+    {
+        $this->httpClient->expects($this->once())
+            ->method('request')
+            ->with('GET', Client::MTG_SETS . '/123');
+
+        $client = new Client($this->httpClient);
+
+        $client->getSet(123);
+    }
+
+    public function testGetTypes()
+    {
+        $this->httpClient->expects($this->once())
+            ->method('request')
+            ->with('GET', Client::MTG_TYPES);
+
+        $client = new Client($this->httpClient);
+
+        $client->getTypes();
+    }
+
+    public function testGetSuperTypes()
+    {
+        $this->httpClient->expects($this->once())
+            ->method('request')
+            ->with('GET', Client::MTG_SUPERTYPES);
+
+        $client = new Client($this->httpClient);
+
+        $client->getSuperTypes();
+    }
+
+    public function testGetSubTypes()
+    {
+        $this->httpClient->expects($this->once())
+            ->method('request')
+            ->with('GET', Client::MTG_SUBTYPES);
+
+        $client = new Client($this->httpClient);
+
+        $client->getSubTypes();
+    }
+
+    public function testGetColors()
+    {
+        $this->httpClient->expects($this->once())
+            ->method('request')
+            ->with('GET', Client::MTG_COLORS);
+
+        $client = new Client($this->httpClient);
+
+        $client->getColors();
+    }
 }

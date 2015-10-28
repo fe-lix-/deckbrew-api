@@ -9,6 +9,11 @@ class Client
 {
     const BASE_URL = 'https://api.deckbrew.com/';
     const MTG_CARDS = '/mtg/cards';
+    const MTG_SETS = '/mtg/sets';
+    const MTG_TYPES = '/mtg/types';
+    const MTG_SUPERTYPES = '/mtg/supertypes';
+    const MTG_SUBTYPES = '/mtg/subtypes';
+    const MTG_COLORS = '/mtg/colors';
 
     /** @var HttpClientInterface */
     private $client;
@@ -48,5 +53,35 @@ class Client
     public function getCard($id)
     {
         return $this->client->request('GET', self::MTG_CARDS . "/$id");
+    }
+
+    public function getSets()
+    {
+        return $this->client->request('GET', self::MTG_SETS);
+    }
+
+    public function getSet($id)
+    {
+        return $this->client->request('GET', self::MTG_SETS . "/$id");
+    }
+
+    public function getTypes()
+    {
+        return $this->client->request('GET', self::MTG_TYPES);
+    }
+
+    public function getSuperTypes()
+    {
+        return $this->client->request('GET', self::MTG_SUPERTYPES);
+    }
+
+    public function getSubTypes()
+    {
+        return $this->client->request('GET', self::MTG_SUBTYPES);
+    }
+
+    public function getColors()
+    {
+        return $this->client->request('GET', self::MTG_COLORS);
     }
 }
