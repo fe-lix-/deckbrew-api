@@ -9,9 +9,6 @@ class CardSearch
     /** @var AbstractSpecification[] */
     private $specifications = [];
 
-    /** @var int */
-    private $page;
-
     /**
      * @param AbstractSpecification[] $specifications
      */
@@ -28,10 +25,6 @@ class CardSearch
         $criteria = [];
         foreach ($this->specifications as $specification) {
             $criteria[] = [$specification->getSpecificationType() => $specification->getValue()];
-        }
-
-        if (!is_null($this->page)) {
-            $criteria['page'] = $this->page;
         }
 
         return $criteria;
