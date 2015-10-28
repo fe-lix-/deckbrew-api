@@ -22,15 +22,23 @@ class Client
         $this->client = $client ? $client : new HttpClient($this->options);
     }
 
-    public function searchCard(Criteria\CardSearch $criteria = null)
+    public function searchCard(Criteria\CardSearch $criteria = null, $pageNumber = 0)
     {
         $url = self::MTG_CARDS;
 
+
+        $queryParams = [];
         if ($criteria) {
-            $queryParams = [];
             foreach ($criteria->getCriteria() as $value) {
-                $queryParams[] = key($value) . '=' . current($value);
+                $queryParams[] = sprintf('%s=%s', key($value), current($value));
             }
+        }
+
+        if ($pageNumber > 0) {
+            $queryParams[] = sprintf('%s=%s', 'page', $pageNumber);
+        }
+
+        if ($queryParams) {
             $url = $url . "?" . implode('&', $queryParams);
         }
 
