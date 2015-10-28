@@ -3,7 +3,7 @@
     "description": "PHP DeckBrew Api",
     "license": "MIT",
     "require": {
-        "php": ">=5.3.0",
+        "php": ">=5.5.0",
         "guzzlehttp/guzzle": "^6.1"
     },
     "require-dev": {
