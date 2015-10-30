@@ -4,10 +4,11 @@ namespace DeckBrew;
 
 use GuzzleHttp\ClientInterface as HttpClient;
 use DeckBrew\Criteria\Specifications as Spec;
+use Psr\Http\Message\MessageInterface;
 
 class ClientTest extends \PHPUnit_Framework_TestCase
 {
-    const RESPONSE = 'response';
+    const RESPONSE = '["response"]';
 
     private $httpClient;
 
@@ -18,10 +19,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testSearchAllCards()
     {
-        $this->httpClient->expects($this->once())
-            ->method('request')
-            ->with('GET', Client::MTG_CARDS, [])
-            ->willReturn(self::RESPONSE);
+        $this->aGetRequestWillBePerformed(Client::MTG_CARDS);
 
         $client = new Client($this->httpClient);
         $client->searchCard();
@@ -29,9 +27,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testSearchCardByName()
     {
-        $this->httpClient->expects($this->once())
-            ->method('request')
-            ->with('GET', Client::MTG_CARDS . '?name=somename');
+        $this->aGetRequestWillBePerformed(Client::MTG_CARDS . '?name=somename');
 
         $client = new Client($this->httpClient);
         $criteria = new Criteria\CardSearch([
@@ -43,9 +39,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testSearchCardByDuplicatedProperty()
     {
-        $this->httpClient->expects($this->once())
-            ->method('request')
-            ->with('GET', Client::MTG_CARDS . '?color=red&color=blue');
+        $this->aGetRequestWillBePerformed(Client::MTG_CARDS . '?color=red&color=blue');
 
         $client = new Client($this->httpClient);
         $criteria = new Criteria\CardSearch([
@@ -58,9 +52,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testSearchCardGetPage()
     {
-        $this->httpClient->expects($this->once())
-            ->method('request')
-            ->with('GET', Client::MTG_CARDS . '?page=1');
+        $this->aGetRequestWillBePerformed(Client::MTG_CARDS . '?page=1');
 
         $client = new Client($this->httpClient);
 
@@ -69,9 +61,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCard()
     {
-        $this->httpClient->expects($this->once())
-            ->method('request')
-            ->with('GET', Client::MTG_CARDS . '/1234');
+        $this->aGetRequestWillBePerformed(Client::MTG_CARDS . '/1234');
 
         $client = new Client($this->httpClient);
 
@@ -80,9 +70,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSets()
     {
-        $this->httpClient->expects($this->once())
-            ->method('request')
-            ->with('GET', Client::MTG_SETS);
+        $this->aGetRequestWillBePerformed(Client::MTG_SETS);
 
         $client = new Client($this->httpClient);
 
@@ -91,9 +79,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSet()
     {
-        $this->httpClient->expects($this->once())
-            ->method('request')
-            ->with('GET', Client::MTG_SETS . '/123');
+        $this->aGetRequestWillBePerformed(Client::MTG_SETS . '/123');
 
         $client = new Client($this->httpClient);
 
@@ -102,9 +88,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTypes()
     {
-        $this->httpClient->expects($this->once())
-            ->method('request')
-            ->with('GET', Client::MTG_TYPES);
+        $this->aGetRequestWillBePerformed(Client::MTG_TYPES);
 
         $client = new Client($this->httpClient);
 
@@ -113,9 +97,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSuperTypes()
     {
-        $this->httpClient->expects($this->once())
-            ->method('request')
-            ->with('GET', Client::MTG_SUPERTYPES);
+        $this->aGetRequestWillBePerformed(Client::MTG_SUPERTYPES);
 
         $client = new Client($this->httpClient);
 
@@ -124,9 +106,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSubTypes()
     {
-        $this->httpClient->expects($this->once())
-            ->method('request')
-            ->with('GET', Client::MTG_SUBTYPES);
+        $this->aGetRequestWillBePerformed(Client::MTG_SUBTYPES);
 
         $client = new Client($this->httpClient);
 
@@ -135,12 +115,24 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testGetColors()
     {
-        $this->httpClient->expects($this->once())
-            ->method('request')
-            ->with('GET', Client::MTG_COLORS);
+        $this->aGetRequestWillBePerformed(Client::MTG_COLORS);
 
         $client = new Client($this->httpClient);
 
         $client->getColors();
+    }
+
+    private function aGetRequestWillBePerformed($address)
+    {
+        $response = $this->getMock(MessageInterface::class);
+        $response->expects($this->once())
+            ->method('getBody')
+            ->willReturn(self::RESPONSE);
+
+
+        $this->httpClient->expects($this->once())
+            ->method('request')
+            ->with('GET', $address, [])
+            ->willReturn($response);
     }
 }

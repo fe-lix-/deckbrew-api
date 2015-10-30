@@ -47,41 +47,53 @@ class Client
             $url = $url . "?" . implode('&', $queryParams);
         }
 
-        return $this->client->request('GET', $url);
+        return $this->getRequest($url);
     }
 
     public function getCard($id)
     {
-        return $this->client->request('GET', self::MTG_CARDS . "/$id");
+        return $this->getRequest(self::MTG_CARDS . "/$id");
     }
 
     public function getSets()
     {
-        return $this->client->request('GET', self::MTG_SETS);
+        return $this->getRequest(self::MTG_SETS);
     }
 
     public function getSet($id)
     {
-        return $this->client->request('GET', self::MTG_SETS . "/$id");
+        return $this->getRequest(self::MTG_SETS . "/$id");
     }
 
     public function getTypes()
     {
-        return $this->client->request('GET', self::MTG_TYPES);
+        return $this->getRequest(self::MTG_TYPES);
     }
 
     public function getSuperTypes()
     {
-        return $this->client->request('GET', self::MTG_SUPERTYPES);
+        return $this->getRequest(self::MTG_SUPERTYPES);
     }
 
     public function getSubTypes()
     {
-        return $this->client->request('GET', self::MTG_SUBTYPES);
+        return $this->getRequest(self::MTG_SUBTYPES);
     }
 
     public function getColors()
     {
-        return $this->client->request('GET', self::MTG_COLORS);
+        return $this->getRequest(self::MTG_COLORS);
+    }
+
+    /**
+     * @param $url
+     * @return mixed|\Psr\Http\Message\ResponseInterface
+     */
+    protected function getRequest($url)
+    {
+        $response = $this->client->request('GET', $url);
+        $body = $response->getBody();
+
+        return new Response(json_decode($body, true));
     }
 }
